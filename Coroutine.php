@@ -60,10 +60,6 @@ class Coroutine implements ICoroutine
      */
     public function uid(): int
     {
-        if (class_exits('\\Swoole\\Coroutine')) {
-            return -1;
-        }
-
         return SwooleCoroutine::getuid();
     }
 }
