@@ -18,12 +18,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol\Facade;
+namespace Leevel\Protocol\Proxy;
 
 use Leevel\Di\Container;
 
 /**
- * 门面 pool.
+ * 代理 pool.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
