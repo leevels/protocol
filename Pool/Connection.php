@@ -18,51 +18,62 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol;
-
-use SplStack;
+namespace Leevel\Protocol\Pool;
 
 /**
- * 对象池接口.
+ * 连接池连接驱动.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.12.14
+ * @since 2019.07.24
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
-interface IPool
+trait Connection
 {
     /**
-     * 获取一个对象.
+     * 连接池.
      *
-     * @param string $className
-     * @param array  ...$args
-     *
-     * @return object
+     * @var \Leevel\Protocol\Pool\IPool
      */
-    public function get(string $className, ...$args): object;
+    protected $pool;
 
     /**
-     * 返还一个对象.
+     * 是否归还连接池.
      *
-     * @param object $obj
+     * @var bool
      */
-    public function back(object $obj): void;
+    protected $release = false;
 
     /**
-     * 获取对象栈.
-     *
-     * @param string $className
-     *
-     * @return \SplStack
+     * 归还连接池.
      */
-    public function pool(string $className): SplStack;
+    public function release(): void
+    {
+        if ($this->release) {
+            $this->release = false;
+            $this->pool->returnConnection($this);
+        }
+    }
 
     /**
-     * 获取对象池数据.
+     * 设置是否归还连接池.
      *
-     * @return array
+     * @param bool $release
      */
-    public function getPools(): array;
+    public function setRelease(bool $release): void
+    {
+        $this->release = $release;
+    }
+
+    /**
+     * 设置关联连接池.
+     *
+     * @param \Leevel\Protocol\Pool\IPool $pool
+     */
+    public function setPool(IPool $pool): void
+    {
+        $this->pool = $pool;
+    }
 }

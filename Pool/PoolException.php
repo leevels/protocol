@@ -18,34 +18,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol\Process;
+namespace Leevel\Protocol\Pool;
+
+use Exception;
 
 /**
- * Swoole 自动进程抽象类.
+ * 连接池异常.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.12.15
+ * @since 2019.07.07
  *
  * @version 1.0
  * @codeCoverageIgnore
  */
-abstract class Process
+class PoolException extends Exception
 {
-    /**
-     * 进程名字.
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * 获取进程名称.
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
 }

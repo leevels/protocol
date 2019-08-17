@@ -18,55 +18,40 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol\Console;
+namespace Leevel\Protocol;
 
-use Leevel\Di\Container;
-use Leevel\Protocol\Console\Base\Reload as BaseReload;
-use Leevel\Protocol\IServer;
+use Closure;
 
 /**
- * Http 服务重启.
+ * 任务管理接口.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2017.12.27
+ * @since 2019.07.01
  *
  * @version 1.0
  * @codeCoverageIgnore
  */
-class HttpReload extends BaseReload
+interface ITask
 {
     /**
-     * 命令名字.
+     * 投递异步任务.
      *
-     * @var string
+     * @param string        $data
+     * @param int           $workerId
+     * @param null|\Closure $finishCallback
+     *
+     * @return bool|int
      */
-    protected string $name = 'http:reload';
+    public function task(string $data, int $workerId = -1, ?Closure $finishCallback = null);
 
     /**
-     * 命令行描述.
+     * 并发执行Task并进行协程调度.
      *
-     * @var string
-     */
-    protected string $description = 'Reload http service';
-
-    /**
-     * 创建 server.
+     * @param array      $tasks
+     * @param null|float $timeout
      *
-     * @return \Leevel\Protocol\IServer
+     * @return array
      */
-    protected function createServer(): IServer
-    {
-        return Container::singletons()->make('http.server');
-    }
-
-    /**
-     * 返回 Version.
-     *
-     * @return string
-     */
-    protected function getVersion(): string
-    {
-        return PHP_EOL.'                     HTTP RELOAD'.PHP_EOL;
-    }
+    public function taskCo(array $tasks, ?float $timeout = null): array;
 }

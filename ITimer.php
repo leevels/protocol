@@ -18,33 +18,39 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol\Proxy;
+namespace Leevel\Protocol;
 
-use Leevel\Di\Container;
+use Closure;
 
 /**
- * 代理 pool.
+ * 定时器接口.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.12.17
+ * @since 2019.07.03
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
-class Pool
+interface ITimer
 {
     /**
-     * call.
+     * 执行任务支持失败重试.
      *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return mixed
+     * @param \Closure      $work
+     * @param int           $perMillisecond
+     * @param int           $maxCount
+     * @param null|\Closure $failtureCallback
      */
-    public static function __callStatic(string $method, array $args)
-    {
-        return Container::singletons()
-            ->make('pool')
-            ->{$method}(...$args);
-    }
+    public function work(Closure $work, int $perMillisecond, int $maxCount, ?Closure $failtureCallback = null): void;
+
+    /**
+     * 每隔一段时间执行同一任务.
+     *
+     * @param \Closure      $work
+     * @param int           $perMillisecond
+     * @param int           $maxCount
+     * @param null|\Closure $failtureCallback
+     */
+    public function perWork(Closure $work, int $perMillisecond, int $maxCount, ?Closure $failtureCallback = null): void;
 }

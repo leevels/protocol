@@ -18,30 +18,41 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Protocol;
-
-use Leevel\Protocol\Proxy\Pool;
+namespace Leevel\Protocol\Pool;
 
 /**
- * 对象池归还.
+ * 连接池连接驱动接口.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.12.17
+ * @since 2019.07.05
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
-trait TPool
+interface IConnection
 {
     /**
-     * 析构函数.
+     * 归还连接池.
      */
-    public function __destruct()
-    {
-        if (!extension_loaded('swoole')) {
-            return;
-        }
+    public function release(): void;
 
-        Pool::back($this);
-    }
+    /**
+     * 设置是否归还连接池.
+     *
+     * @param bool $release
+     */
+    public function setRelease(bool $release): void;
+
+    /**
+     * 设置关联连接池.
+     *
+     * @param \Leevel\Protocol\Pool\IPool $pool
+     */
+    public function setPool(IPool $pool): void;
+
+    /**
+     * 关闭连接.
+     */
+    public function close(): void;
 }
